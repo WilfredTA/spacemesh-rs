@@ -26,6 +26,13 @@ pub struct Bytes20([u8; 20]);
 pub struct Bytes32([u8; 32]);
 
 
+impl From<Vec<u8>> for Bytes32 {
+    fn from(bytes: Vec<u8>) -> Self {
+        let mut buf = [0u8; 32];
+        buf.copy_from_slice(bytes.as_slice());
+        Self(buf)
+    }
+}
 impl Hashable for Bytes64 {
     fn hash(&self) -> Hash {
         todo!()

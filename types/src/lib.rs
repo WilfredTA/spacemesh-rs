@@ -8,7 +8,19 @@ pub mod layer;
 pub mod proposal;
 pub mod hashes;
 pub mod bytes;
+pub mod address;
+pub mod beacon;
+pub mod db;
+pub type PubKey = u8;
+pub struct EpochId(pub u32);
+pub struct BlockId(pub hashes::Hash20);
+pub struct LayerId(pub u32);
+pub struct TxId(pub hashes::Hash32);
+pub struct AtxId(pub hashes::Hash32);
 
+pub struct NodeId(pub bytes::Bytes32);
+
+pub struct BallotId(pub hashes::Hash20);
 pub trait Hex {
     fn to_hex(&self) -> String;
 

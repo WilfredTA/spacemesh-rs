@@ -4,3 +4,14 @@ mod tx;
 pub use tx_header::*;
 pub use tx_result::*;
 pub use tx::*;
+
+
+pub struct Nonce {
+    pub counter: u64,
+    pub bitfield: u8,
+}
+
+pub struct LayerLimits {
+    min: u32,
+    max: u32
+}

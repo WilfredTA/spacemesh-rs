@@ -1,0 +1,1 @@
+pub struct Beacon(Vec<u32>);

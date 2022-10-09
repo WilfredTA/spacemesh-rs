@@ -1,9 +1,23 @@
 use bytes::{Bytes, BytesMut, Buf};
 use super::bytes::{Bytes12, Bytes20, Bytes32};
+use sha2::{Sha256, Digest};
 
+pub fn hash_256(data: impl AsRef<[u8]>) -> Vec<u8> {
+    let mut hasher = Sha256::new();
+    hasher.update(data.as_ref());
+    hasher.finalize().to_vec()
+}
 pub struct Hash12(Bytes12);
 
 pub struct Hash32(Bytes32);
+
+impl<A> From<A> for Hash32 
+where A: Into<Bytes32>
+{
+    fn from(bytes: A) -> Self {
+        Self(bytes.into())
+    }
+}
 
 pub struct Hash20(Bytes20);
 
