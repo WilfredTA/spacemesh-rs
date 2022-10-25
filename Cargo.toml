@@ -8,3 +8,4 @@ authors = ["Tannr Allard"]
 
 [workspace]
 members = ["types"]
+

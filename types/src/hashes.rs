@@ -1,4 +1,5 @@
 use bytes::{Bytes, BytesMut, Buf};
+use parity_scale_codec::{Decode, Encode};
 use super::bytes::{Bytes12, Bytes20, Bytes32};
 use sha2::{Sha256, Digest};
 
@@ -7,8 +8,10 @@ pub fn hash_256(data: impl AsRef<[u8]>) -> Vec<u8> {
     hasher.update(data.as_ref());
     hasher.finalize().to_vec()
 }
+#[derive(PartialEq, Encode, Decode)]
 pub struct Hash12(Bytes12);
 
+#[derive(PartialEq, Encode, Decode)]
 pub struct Hash32(Bytes32);
 
 impl<A> From<A> for Hash32 
@@ -18,7 +21,7 @@ where A: Into<Bytes32>
         Self(bytes.into())
     }
 }
-
+#[derive(PartialEq, Encode, Decode, Default)]
 pub struct Hash20(Bytes20);
 
 pub struct Hash {

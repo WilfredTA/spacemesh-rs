@@ -1,16 +1,17 @@
-use bytes::Bytes;
+use crate::bytes::Bytes;
+use parity_scale_codec::{Encode, Decode};
 
 use crate::{address::Address, AtxId, hashes::Hash32, NodeId};
 
 use super::post::*;
 
-
+#[derive(PartialEq, Encode, Decode)]
 pub struct Atx {
     inner: InnerATX,
     sig: Bytes,
 }
 
-
+#[derive(PartialEq, Encode, Decode)]
 pub struct InnerATX {
     nipost_challenge: (),
     coinbase: Address,

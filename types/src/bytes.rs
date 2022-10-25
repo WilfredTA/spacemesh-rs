@@ -2,9 +2,25 @@ use bytes::Buf;
 use thiserror::Error;
 use std::io::prelude::*;
 use std::fmt::Error as FmtError;
-use parity_scale_codec::Error as ScaleError;
+use parity_scale_codec::{Error as ScaleError, WrapperTypeDecode, CompactAs};
 use parity_scale_codec::{Decode, Encode};
 use super::hashes::{Hash, Hashable};
+
+#[derive(PartialEq, Clone, Encode, Decode)]
+pub struct Bytes(Vec<u8>);
+
+impl<T> From<T> for Bytes
+where
+    T: Into<Vec<u8>>
+{
+    fn from(o: T) -> Self {
+        Self(o.into())
+    }
+}
+// pub struct Bytes {
+//     #[codec(encode_as = "")]
+//     inner: bytes::Bytes
+// }
 #[derive(Debug, Error)]
 pub enum BytesError {
     #[error(transparent)]
@@ -13,16 +29,16 @@ pub enum BytesError {
 
 type Bytes64Result<T> = Result<T, BytesError>;
 
-#[derive(Encode, Decode)]
+#[derive(PartialEq, Encode, Decode)]
 pub struct Bytes64([u8; 64]);
 
-#[derive(Encode, Decode)]
+#[derive(PartialEq, Encode, Decode)]
 pub struct Bytes12([u8; 12]);
 
-#[derive(Encode, Decode)]
+#[derive(PartialEq, Encode, Decode, Default)]
 pub struct Bytes20([u8; 20]);
 
-#[derive(Encode, Decode)]
+#[derive(PartialEq, Encode, Decode)]
 pub struct Bytes32([u8; 32]);
 
 

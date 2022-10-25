@@ -1,9 +1,11 @@
+use parity_scale_codec::{Encode, Decode};
+
 use crate::address::Address;
 
 use super::{Nonce, LayerLimits};
 
 
-
+#[derive(PartialEq, Encode, Decode)]
 pub struct TxHeader {
     pub principal: Address,
     pub template: Address,

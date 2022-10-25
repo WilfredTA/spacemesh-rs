@@ -1,12 +1,13 @@
-use bytes::Bytes;
+use crate::bytes::Bytes;
+use parity_scale_codec::{Encode, Decode};
 
 use crate::hashes::Hash32;
-
+#[derive(PartialEq, Encode, Decode)]
 pub struct Post {
     nonce: u32,
     indices: Vec<u8>,
 }
-
+#[derive(PartialEq, Encode, Decode)]
 pub struct PostMetadata {
     challenge: Bytes,
     bits_per_lbl: u8,
@@ -14,7 +15,7 @@ pub struct PostMetadata {
     k1: u32,
     k2: u32,
 }
-
+#[derive(PartialEq, Encode, Decode)]
 pub struct NiPost {
     challenge: Hash32,
     post: Post,
