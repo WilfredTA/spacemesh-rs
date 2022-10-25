@@ -9,6 +9,16 @@ use super::hashes::{Hash, Hashable};
 #[derive(PartialEq, Clone, Encode, Decode)]
 pub struct Bytes(Vec<u8>);
 
+impl AsRef<[u8]> for Bytes {
+    fn as_ref(&self) -> &[u8] {
+        self.0.as_ref()
+    }
+}
+impl Bytes {
+    pub fn raw(&self) -> Vec<u8> {
+        self.0.clone()
+    }
+}
 impl<T> From<T> for Bytes
 where
     T: Into<Vec<u8>>
@@ -17,6 +27,8 @@ where
         Self(o.into())
     }
 }
+
+
 // pub struct Bytes {
 //     #[codec(encode_as = "")]
 //     inner: bytes::Bytes
