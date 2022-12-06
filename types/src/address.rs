@@ -4,6 +4,8 @@ use crate::{bytes::Bytes, hashes::{Hashable, hash_256}};
 use parity_scale_codec::{Decode, Encode};
 use bech32::{Error as Bech32Error, encode, decode};
 
+pub const ADDR_LENGTH: usize = 24;
+pub const ADDR_RESERVED_SPACE: usize = 4;
 #[derive(Debug, Error)]
 pub enum AddressError {
     #[error(transparent)]
@@ -49,8 +51,22 @@ impl Address {
         todo!()
     }
 
-    pub fn new(pubkey: &[u8]) -> Self {
-        todo!()
+    // from common/types/address/GenerateAddress in go-spacemesh
+    pub fn from_pubkey(pubkey: &[u8]) -> Self {
+        let mut addr: [u8; 24] = [0u8; 24]; 
+        let addr_bytes = {
+            if pubkey.len() > ADDR_LENGTH - ADDR_RESERVED_SPACE {
+                &pubkey[pubkey.len() - (ADDR_LENGTH - ADDR_RESERVED_SPACE)..]                
+            } else {
+                pubkey
+            }
+        };
+        let mut addr_slice = &mut addr[ADDR_RESERVED_SPACE..];
+        addr_slice.copy_from_slice(addr_bytes);
+        Self {
+            len: ADDR_LENGTH as u32,
+            content: addr.into()
+        }
     }
 
     pub fn hrp_network(&self) -> String {
