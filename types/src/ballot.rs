@@ -1,6 +1,6 @@
-use crate::bytes::Bytes;
+use crate::{bytes::Bytes, block::{BlockId, Block}};
 use parity_scale_codec::{Encode, Decode};
-use crate::{BallotId, PubKey, AtxId, BlockId, LayerId, beacon::Beacon};
+use crate::{BallotId, PubKey, AtxId, LayerId, beacon::Beacon};
 
 #[derive(PartialEq, Encode, Decode)]
 pub struct Ballot {
@@ -35,4 +35,17 @@ pub struct Votes {
 pub struct EpochData {
     active: Vec<AtxId>,
     beacon: Beacon,
+}
+
+#[derive(PartialEq, Encode, Decode)]
+pub struct Vote {
+    id: BlockId,
+    layer_id: LayerId,
+    height: u64
+}
+
+impl From<Block> for Vote {
+    fn from(b: Block) -> Vote {
+        todo!()
+    }
 }

@@ -3,7 +3,7 @@ extern crate rand;
 
 
 use rand::{prelude::*, rngs::OsRng};
-use spacemesh_types::address::Address;
+use spacemesh_types::{address::Address, BlockId, proposal::ProposalId, bytes::Bytes20, hashes::Hash20};
 use rand::rngs::ThreadRng;
 use rand::CryptoRng;
 use rand::rngs::mock::StepRng;
@@ -44,4 +44,9 @@ pub fn sign_msg(msg: &[u8], keypair: &Keypair) -> Signature {
 
 pub fn verify_msg(msg: &[u8], pubkey: &PublicKey, sig: &Signature) -> bool {
     pubkey.verify(msg, sig).is_ok()
+}
+
+pub fn random_block_id() -> Hash20 {
+    let random_bytes: [u8; 20] = random();
+    Hash20(Bytes20::from(random_bytes))
 }

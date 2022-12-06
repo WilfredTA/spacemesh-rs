@@ -1,6 +1,6 @@
 use parity_scale_codec::{Encode, Decode};
 
-use crate::{LayerId, address::Address, hashes::Hash32};
+use crate::{LayerId, address::Address, hashes::{Hash32, Hash20, Hash}, bytes::Bytes};
 
 pub type RatNum = u64;
 
@@ -10,6 +10,16 @@ pub struct Block {
     id: BlockId,
     inner: InnerBlock,
 }
+impl Block {
+    pub fn init(&mut self) {
+        let self_bytes = self.inner.encode();
+        let hashed = Hash::hash(self_bytes);
+        let self_hash = hashed.as_hash20();
+        self.id = self_hash;
+    }
+}
+
+
 
 #[derive(PartialEq, Encode, Decode)]
 pub struct AnyReward {
@@ -22,4 +32,21 @@ struct InnerBlock {
     tick_height: u64,
     rewards: Vec<AnyReward>,
     tx_ids: Vec<Hash32>,
+}
+#[derive(PartialEq, Encode, Decode)]
+pub struct Certificate {
+    id: BlockId,
+    sigs: Vec<CertifyMsg>,
+}
+#[derive(PartialEq, Encode, Decode)]
+pub struct CertifyMsg {
+    pub content: CertifyContent,
+    pub sig: Bytes
+}
+#[derive(PartialEq, Encode, Decode)]
+pub struct CertifyContent {
+    pub layerid: LayerId,
+    pub blockid: BlockId,
+    pub eligibility_count: u16,
+    pub proof: Bytes
 }

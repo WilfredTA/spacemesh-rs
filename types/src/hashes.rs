@@ -22,11 +22,20 @@ where A: Into<Bytes32>
     }
 }
 #[derive(PartialEq, Encode, Decode, Default, Clone)]
-pub struct Hash20(pub(crate) Bytes20);
+pub struct Hash20(pub Bytes20);
 
 pub struct Hash {
     size: usize,
     inner_data: Bytes
+}
+
+impl From<Bytes> for Hash {
+    fn from(b: Bytes) -> Self {
+        Self {
+            size: b.len(),
+            inner_data: b
+        }
+    }
 }
 
 impl From<Hash12> for Hash {
@@ -53,6 +62,14 @@ impl From<Hash32> for Hash {
     }
 }
 impl Hash {
+
+    pub fn hash(data: impl AsRef<[u8]>) -> Self {
+        let hashed = hash_256(data);
+        Self {
+            size: hashed.len(),
+            inner_data: hashed.into()
+        }
+    }
     pub(crate) fn new(bytes: impl Into<Bytes>, sz: usize) -> Self {
         Self {
             size: sz,
@@ -90,3 +107,4 @@ impl Hash {
 pub trait Hashable {
     fn hash(&self) -> Hash;
 }
+

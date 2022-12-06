@@ -12,7 +12,7 @@ pub enum ProposalError {
 pub type ProposalResult<T> = Result<T, ProposalError>;
 
 #[derive(Default, Clone, Encode, Decode)]
-pub struct ProposalId(Hash20);
+pub struct ProposalId(pub Hash20);
 
 impl From<ProposalId> for Bytes {
     fn from(id: ProposalId) -> Self {

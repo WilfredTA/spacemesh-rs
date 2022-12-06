@@ -63,6 +63,17 @@ impl Hashable for Bytes64 {
     }
 }
 
+impl Hashable for Bytes32 {
+    fn hash(&self) -> Hash {
+        todo!()
+    }
+}
+
+impl Hashable for Bytes20 {
+    fn hash(&self) -> Hash {
+        todo!()
+    }
+}
 impl From<Bytes12> for Bytes64 {
     fn from(_: Bytes12) -> Self {
         todo!()

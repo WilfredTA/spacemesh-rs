@@ -35,12 +35,6 @@ fn test_fails_when_incorrect_charset() {
 }
 
 
-
-#[test]
-fn test_fails_when_incorrect_len_or_missing_hrp() {
-
-}
-
 #[test]
 fn test_fails_when_unsupported_network() {
     let addr_string = "sut1fejq2x3d79ukpkw06t7h6lndjuwzxdnj59npghsldfkky";
@@ -50,7 +44,3 @@ fn test_fails_when_unsupported_network() {
 }
 
 
-#[test]
-fn test_generate_addr_from_pubkey() {
-    
-}
