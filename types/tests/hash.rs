@@ -1,16 +1,11 @@
-use spacemesh_types::hashes::*;
 use spacemesh_types::bytes::*;
-
-
-#[test]
-fn test_hash() {
-
-}
+use spacemesh_types::hashes::*;
 
 #[test]
-fn test_convert_hash32_hash20() {
+fn test_hash() {}
 
-}
+#[test]
+fn test_convert_hash32_hash20() {}
 
 #[test]
 fn test_hash20_hash32_convert_zero_pads() {

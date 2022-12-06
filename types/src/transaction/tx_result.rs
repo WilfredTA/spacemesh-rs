@@ -1,7 +1,6 @@
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::{Decode, Encode};
 
-use crate::{block::BlockId, LayerId, address::Address};
-
+use crate::{address::Address, block::BlockId, LayerId};
 
 #[derive(PartialEq, Encode, Decode)]
 pub struct TxResult {

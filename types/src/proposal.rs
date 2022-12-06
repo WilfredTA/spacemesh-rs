@@ -1,12 +1,17 @@
 use parity_scale_codec::{Decode, Encode};
 
-use crate::{hashes::{Hash20, hash_256, Hash32}, bytes::Bytes, ballot::Ballot, TxId};
+use crate::{
+    ballot::Ballot,
+    bytes::Bytes,
+    hashes::{hash_256, Hash20, Hash32},
+    TxId,
+};
 use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum ProposalError {
     #[error("Proposal already initialized")]
-    ProposalAlreadyInit
+    ProposalAlreadyInit,
 }
 
 pub type ProposalResult<T> = Result<T, ProposalError>;
@@ -33,15 +38,14 @@ impl ProposalId {
 pub struct Proposal {
     inner: InnerProposal,
     sig: Bytes,
-    id: ProposalId
+    id: ProposalId,
 }
 
 pub struct InnerProposal {
     ballot: Ballot,
     tx_ids: Vec<TxId>,
-    mesh_hash: Hash32
+    mesh_hash: Hash32,
 }
-
 
 impl Proposal {
     pub fn init(&mut self) -> ProposalResult<Proposal> {
@@ -52,10 +56,5 @@ impl Proposal {
         todo!()
     }
 
-    pub fn set_id(&mut self, id: impl Into<ProposalId>) {
-
-    }
-
-
+    pub fn set_id(&mut self, id: impl Into<ProposalId>) {}
 }
-

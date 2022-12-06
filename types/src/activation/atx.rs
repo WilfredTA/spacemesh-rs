@@ -1,7 +1,7 @@
 use crate::bytes::Bytes;
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::{Decode, Encode};
 
-use crate::{address::Address, AtxId, hashes::Hash32, NodeId};
+use crate::{address::Address, hashes::Hash32, AtxId, NodeId};
 
 use super::post::*;
 
@@ -21,4 +21,3 @@ pub struct InnerATX {
     id: AtxId,
     node: NodeId,
 }
-

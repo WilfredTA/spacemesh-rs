@@ -1,5 +1,5 @@
 use crate::bytes::Bytes;
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::{Decode, Encode};
 
 use crate::hashes::Hash32;
 #[derive(PartialEq, Encode, Decode)]

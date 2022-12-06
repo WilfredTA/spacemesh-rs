@@ -1,17 +1,17 @@
 #![allow(unused)]
-use parity_scale_codec::{Encode, Decode};
-pub mod transaction;
+use parity_scale_codec::{Decode, Encode};
 pub mod account;
 pub mod activation;
+pub mod address;
 pub mod ballot;
+pub mod beacon;
 pub mod block;
+pub mod bytes;
+pub mod db;
+pub mod hashes;
 pub mod layer;
 pub mod proposal;
-pub mod hashes;
-pub mod bytes;
-pub mod address;
-pub mod beacon;
-pub mod db;
+pub mod transaction;
 pub type PubKey = u8;
 #[derive(PartialEq, Encode, Decode)]
 pub struct EpochId(pub u32);
@@ -33,9 +33,6 @@ pub trait Hex {
 
     fn from_hex(data: impl AsRef<u8>) -> Self;
 }
-
-
-
 
 #[cfg(test)]
 mod tests {

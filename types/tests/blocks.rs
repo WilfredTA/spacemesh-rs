@@ -1,13 +1,7 @@
-use spacemesh_types::{
-    transaction::*,
-    block::*,
-    hashes::*,
-    bytes::Bytes as SmeshBytes, LayerId,
+use spacemesh_types::{block::*, bytes::Bytes as SmeshBytes, hashes::*, transaction::*, LayerId};
 
-};
-
+use hex::{decode, encode, FromHex, ToHex};
 use parity_scale_codec::{Decode, Encode};
-use hex::{FromHex, ToHex, encode, decode};
 mod common;
 use common::*;
 
@@ -26,7 +20,7 @@ fn test_certify_msg() {
 
     let msg = CertifyMsg {
         content: msg_content,
-        sig: sig.to_bytes().into()
+        sig: sig.to_bytes().into(),
     };
     // encode then decode msg
     // assert that decoded == original
@@ -35,36 +29,22 @@ fn test_certify_msg() {
 }
 
 #[test]
-fn test_blockids_to_hashes() {
-
-}
+fn test_blockids_to_hashes() {}
 
 #[test]
-fn test_new_existing_block() {
-
-}
+fn test_new_existing_block() {}
 
 #[test]
-fn test_block_init() {
-
-}
+fn test_block_init() {}
 
 #[test]
-fn test_block_bytes() {
-
-}
+fn test_block_bytes() {}
 
 #[test]
-fn test_block_field_string() {
-
-}
+fn test_block_field_string() {}
 
 #[test]
-fn test_block_id_cmp() {
-
-}
+fn test_block_id_cmp() {}
 
 #[test]
-fn test_reward_codec() {
-    
-}
+fn test_reward_codec() {}

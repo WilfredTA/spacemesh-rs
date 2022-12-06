@@ -1,7 +1,7 @@
-use bytes::{Bytes, BytesMut, Buf};
-use parity_scale_codec::{Decode, Encode};
 use super::bytes::{Bytes12, Bytes20, Bytes32};
-use sha2::{Sha256, Digest};
+use bytes::{Buf, Bytes, BytesMut};
+use parity_scale_codec::{Decode, Encode};
+use sha2::{Digest, Sha256};
 
 pub fn hash_256(data: impl AsRef<[u8]>) -> Vec<u8> {
     let mut hasher = Sha256::new();
@@ -14,8 +14,9 @@ pub struct Hash12(pub(crate) Bytes12);
 #[derive(PartialEq, Encode, Decode)]
 pub struct Hash32(pub(crate) Bytes32);
 
-impl<A> From<A> for Hash32 
-where A: Into<Bytes32>
+impl<A> From<A> for Hash32
+where
+    A: Into<Bytes32>,
 {
     fn from(bytes: A) -> Self {
         Self(bytes.into())
@@ -26,14 +27,14 @@ pub struct Hash20(pub Bytes20);
 
 pub struct Hash {
     size: usize,
-    inner_data: Bytes
+    inner_data: Bytes,
 }
 
 impl From<Bytes> for Hash {
     fn from(b: Bytes) -> Self {
         Self {
             size: b.len(),
-            inner_data: b
+            inner_data: b,
         }
     }
 }
@@ -62,21 +63,19 @@ impl From<Hash32> for Hash {
     }
 }
 impl Hash {
-
     pub fn hash(data: impl AsRef<[u8]>) -> Self {
         let hashed = hash_256(data);
         Self {
             size: hashed.len(),
-            inner_data: hashed.into()
+            inner_data: hashed.into(),
         }
     }
     pub(crate) fn new(bytes: impl Into<Bytes>, sz: usize) -> Self {
         Self {
             size: sz,
-            inner_data: bytes.into()
+            inner_data: bytes.into(),
         }
     }
-
 
     pub fn as_hash12(&self) -> Hash12 {
         // Size should always be >= 12
@@ -107,4 +106,3 @@ impl Hash {
 pub trait Hashable {
     fn hash(&self) -> Hash;
 }
-

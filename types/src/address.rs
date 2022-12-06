@@ -1,9 +1,12 @@
+use crate::{
+    bytes::Bytes,
+    hashes::{hash_256, Hashable},
+};
+use bech32::{decode, encode, u5, Error as Bech32Error};
+use hex::encode as hexcode;
+use parity_scale_codec::{Decode, Encode};
 use std::fmt::Display;
 use thiserror::Error;
-use crate::{bytes::Bytes, hashes::{Hashable, hash_256}};
-use parity_scale_codec::{Decode, Encode};
-use bech32::{Error as Bech32Error, encode, decode, u5};
-use hex::encode as hexcode;
 pub const ADDR_LENGTH: usize = 24;
 pub const ADDR_RESERVED_SPACE: usize = 4;
 #[derive(Debug, Error, PartialEq, Eq)]
@@ -32,9 +35,6 @@ impl Hrp {
     pub fn default() -> String {
         "sm".to_string()
     }
-
-    
-
 }
 pub type AddressResult<T> = Result<T, AddressError>;
 
@@ -43,9 +43,8 @@ pub type AddressResult<T> = Result<T, AddressError>;
 pub struct Address {
     len: u32,
     pub content: Bytes,
-    hrp: String
+    hrp: String,
 }
-
 
 impl TryFrom<Bytes> for Address {
     type Error = parity_scale_codec::Error;
@@ -67,13 +66,12 @@ impl Display for Address {
     }
 }
 
-
 impl Address {
     // from common/types/address/StringToAddress in go-spacemesh
     pub fn from_string(s: impl AsRef<str>) -> AddressResult<Address> {
         let s = s.as_ref();
         let (hrp, data, variant) = bech32::decode(s)?;
-        
+
         if hrp != Hrp::default() {
             Err(AddressError::WrongNetwork(hrp, Hrp::default()))
         } else {
@@ -81,30 +79,31 @@ impl Address {
             for i in 0..ADDR_RESERVED_SPACE {
                 if *data.get(i).unwrap() != 0 {
                     return Err(AddressError::UseOfReservedAddressSpace(
-                        ADDR_RESERVED_SPACE, 
+                        ADDR_RESERVED_SPACE,
                         bech32::encode(
-                            hrp.as_str(), 
-                            data.iter().map(|d| u5::try_from_u8(*d).unwrap()).collect::<Vec<_>>(), bech32::Variant::Bech32)?
-                        )
-                    )
+                            hrp.as_str(),
+                            data.iter()
+                                .map(|d| u5::try_from_u8(*d).unwrap())
+                                .collect::<Vec<_>>(),
+                            bech32::Variant::Bech32,
+                        )?,
+                    ));
                 }
             }
             Ok(Address {
                 hrp,
                 content: data.into(),
-                len: ADDR_LENGTH as u32
+                len: ADDR_LENGTH as u32,
             })
         }
     }
 
-    
-
     // from common/types/address/GenerateAddress in go-spacemesh
     pub fn from_pubkey(pubkey: &[u8]) -> Self {
-        let mut addr: [u8; 24] = [0u8; 24]; 
+        let mut addr: [u8; 24] = [0u8; 24];
         let addr_bytes = {
             if pubkey.len() > ADDR_LENGTH - ADDR_RESERVED_SPACE {
-                &pubkey[pubkey.len() - (ADDR_LENGTH - ADDR_RESERVED_SPACE)..]                
+                &pubkey[pubkey.len() - (ADDR_LENGTH - ADDR_RESERVED_SPACE)..]
             } else {
                 pubkey
             }
@@ -114,7 +113,7 @@ impl Address {
         Self {
             len: ADDR_LENGTH as u32,
             content: addr.into(),
-            hrp: Hrp::default()
+            hrp: Hrp::default(),
         }
     }
 
@@ -123,10 +122,7 @@ impl Address {
     }
 }
 
-
-
 #[cfg(test)]
 mod address_test {
     use super::*;
-    
 }

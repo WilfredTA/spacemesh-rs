@@ -1,9 +1,8 @@
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::{Decode, Encode};
 
 use crate::address::Address;
 
-use super::{Nonce, LayerLimits};
-
+use super::{LayerLimits, Nonce};
 
 #[derive(PartialEq, Encode, Decode)]
 pub struct TxHeader {
@@ -16,4 +15,3 @@ pub struct TxHeader {
     pub gas_price: u64,
     pub max_spend: u64,
 }
-

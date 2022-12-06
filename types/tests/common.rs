@@ -1,24 +1,24 @@
 extern crate ed25519_dalek;
 extern crate rand;
 
-
-use rand::{prelude::*, rngs::OsRng};
-use spacemesh_types::{address::Address, BlockId, proposal::ProposalId, bytes::Bytes20, hashes::Hash20};
+use rand::rngs::mock::StepRng;
 use rand::rngs::ThreadRng;
 use rand::CryptoRng;
-use rand::rngs::mock::StepRng;
+use rand::{prelude::*, rngs::OsRng};
+use spacemesh_types::{
+    address::Address, bytes::Bytes20, hashes::Hash20, proposal::ProposalId, BlockId,
+};
 
-use ed25519_dalek::{Signature, Signer, Keypair, Verifier, PublicKey};
-
+use ed25519_dalek::{Keypair, PublicKey, Signature, Signer, Verifier};
 
 pub struct TestSigner {
-    keypair: Keypair
+    keypair: Keypair,
 }
 
 impl TestSigner {
     pub fn new() -> Self {
         Self {
-            keypair: gen_keypair()
+            keypair: gen_keypair(),
         }
     }
 
@@ -31,15 +31,13 @@ impl TestSigner {
     }
 }
 
-
 pub fn gen_keypair() -> Keypair {
-    let mut rng = OsRng{};
+    let mut rng = OsRng {};
     Keypair::generate(&mut rng)
-
 }
 
 pub fn sign_msg(msg: &[u8], keypair: &Keypair) -> Signature {
-   keypair.sign(msg)
+    keypair.sign(msg)
 }
 
 pub fn verify_msg(msg: &[u8], pubkey: &PublicKey, sig: &Signature) -> bool {

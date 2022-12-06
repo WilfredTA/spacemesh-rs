@@ -1,8 +1,8 @@
 use parity_scale_codec::{Decode, Encode};
 
-use crate::bytes::Bytes;
-use super::LayerId;
 use super::address::Address;
+use super::LayerId;
+use crate::bytes::Bytes;
 
 #[derive(Encode, Decode)]
 pub struct Account {

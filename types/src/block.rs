@@ -1,6 +1,11 @@
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::{Decode, Encode};
 
-use crate::{LayerId, address::Address, hashes::{Hash32, Hash20, Hash}, bytes::Bytes};
+use crate::{
+    address::Address,
+    bytes::Bytes,
+    hashes::{Hash, Hash20, Hash32},
+    LayerId,
+};
 
 pub type RatNum = u64;
 
@@ -19,12 +24,10 @@ impl Block {
     }
 }
 
-
-
 #[derive(PartialEq, Encode, Decode)]
 pub struct AnyReward {
     coinbase: Address,
-    weight: RatNum
+    weight: RatNum,
 }
 #[derive(PartialEq, Encode, Decode)]
 struct InnerBlock {
@@ -41,12 +44,12 @@ pub struct Certificate {
 #[derive(PartialEq, Encode, Decode)]
 pub struct CertifyMsg {
     pub content: CertifyContent,
-    pub sig: Bytes
+    pub sig: Bytes,
 }
 #[derive(PartialEq, Encode, Decode)]
 pub struct CertifyContent {
     pub layerid: LayerId,
     pub blockid: BlockId,
     pub eligibility_count: u16,
-    pub proof: Bytes
+    pub proof: Bytes,
 }

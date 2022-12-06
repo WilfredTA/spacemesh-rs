@@ -1,5 +1,5 @@
 use crate::bytes::Bytes;
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::{Decode, Encode};
 
 #[derive(PartialEq, Encode, Decode)]
 pub struct PoetProofRef(pub Bytes);
@@ -18,7 +18,7 @@ pub struct PoetProofMsg {
 }
 #[derive(PartialEq, Encode, Decode)]
 pub struct PoetRound {
-    pub id: String
+    pub id: String,
 }
 #[derive(PartialEq, Encode, Decode)]
 pub struct MerkleProof {
