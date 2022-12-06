@@ -2,23 +2,48 @@ use std::fmt::Display;
 use thiserror::Error;
 use crate::{bytes::Bytes, hashes::{Hashable, hash_256}};
 use parity_scale_codec::{Decode, Encode};
-use bech32::{Error as Bech32Error, encode, decode};
-
+use bech32::{Error as Bech32Error, encode, decode, u5};
+use hex::encode as hexcode;
 pub const ADDR_LENGTH: usize = 24;
 pub const ADDR_RESERVED_SPACE: usize = 4;
-#[derive(Debug, Error)]
+#[derive(Debug, Error, PartialEq, Eq)]
 pub enum AddressError {
     #[error(transparent)]
     Bech32Error(#[from] bech32::Error),
+    #[error("Incorrect HRP: expected {0} but got {1}")]
+    WrongNetwork(String, String),
+    #[error("First {0} bytes in address are reserved & should be 0.\nAddress: {1}")]
+    UseOfReservedAddressSpace(usize, String),
 }
 
+pub struct Hrp;
+
+impl Hrp {
+    pub fn testnet() -> String {
+        "stest".to_string()
+    }
+
+    #[cfg(feature = "testnet")]
+    pub fn default() -> String {
+        Hrp::testnet()
+    }
+
+    #[cfg(not(feature = "testnet"))]
+    pub fn default() -> String {
+        "sm".to_string()
+    }
+
+    
+
+}
 pub type AddressResult<T> = Result<T, AddressError>;
 
 // TO DO: Impl Default, Format, Debug
-#[derive(PartialEq, Encode, Decode)]
+#[derive(PartialEq, Encode, Decode, Debug)]
 pub struct Address {
     len: u32,
-    pub content: Bytes
+    pub content: Bytes,
+    hrp: String
 }
 
 
@@ -47,9 +72,32 @@ impl Address {
     // from common/types/address/StringToAddress in go-spacemesh
     pub fn from_string(s: impl AsRef<str>) -> AddressResult<Address> {
         let s = s.as_ref();
-        let r = bech32::decode(s)?;
-        todo!()
+        let (hrp, data, variant) = bech32::decode(s)?;
+        
+        if hrp != Hrp::default() {
+            Err(AddressError::WrongNetwork(hrp, Hrp::default()))
+        } else {
+            let data = data.into_iter().map(|d| d.to_u8()).collect::<Vec<_>>();
+            for i in 0..ADDR_RESERVED_SPACE {
+                if *data.get(i).unwrap() != 0 {
+                    return Err(AddressError::UseOfReservedAddressSpace(
+                        ADDR_RESERVED_SPACE, 
+                        bech32::encode(
+                            hrp.as_str(), 
+                            data.iter().map(|d| u5::try_from_u8(*d).unwrap()).collect::<Vec<_>>(), bech32::Variant::Bech32)?
+                        )
+                    )
+                }
+            }
+            Ok(Address {
+                hrp,
+                content: data.into(),
+                len: ADDR_LENGTH as u32
+            })
+        }
     }
+
+    
 
     // from common/types/address/GenerateAddress in go-spacemesh
     pub fn from_pubkey(pubkey: &[u8]) -> Self {
@@ -65,12 +113,13 @@ impl Address {
         addr_slice.copy_from_slice(addr_bytes);
         Self {
             len: ADDR_LENGTH as u32,
-            content: addr.into()
+            content: addr.into(),
+            hrp: Hrp::default()
         }
     }
 
     pub fn hrp_network(&self) -> String {
-        todo!()
+        self.hrp.clone()
     }
 }
 

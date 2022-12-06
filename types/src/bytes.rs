@@ -6,7 +6,7 @@ use parity_scale_codec::{Error as ScaleError, WrapperTypeDecode, CompactAs};
 use parity_scale_codec::{Decode, Encode};
 use super::hashes::{Hash, Hashable};
 
-#[derive(PartialEq, Clone, Encode, Decode)]
+#[derive(PartialEq, Clone, Encode, Decode, Debug)]
 pub struct Bytes(Vec<u8>);
 
 impl AsRef<[u8]> for Bytes {
