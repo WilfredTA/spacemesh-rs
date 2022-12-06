@@ -29,10 +29,6 @@ where
 }
 
 
-// pub struct Bytes {
-//     #[codec(encode_as = "")]
-//     inner: bytes::Bytes
-// }
 #[derive(Debug, Error)]
 pub enum BytesError {
     #[error(transparent)]
@@ -44,13 +40,13 @@ type Bytes64Result<T> = Result<T, BytesError>;
 #[derive(PartialEq, Encode, Decode)]
 pub struct Bytes64([u8; 64]);
 
-#[derive(PartialEq, Encode, Decode)]
+#[derive(PartialEq, Encode, Decode, Clone)]
 pub struct Bytes12([u8; 12]);
 
-#[derive(PartialEq, Encode, Decode, Default)]
+#[derive(PartialEq, Encode, Decode, Default, Clone)]
 pub struct Bytes20([u8; 20]);
 
-#[derive(PartialEq, Encode, Decode)]
+#[derive(PartialEq, Encode, Decode, Clone)]
 pub struct Bytes32([u8; 32]);
 
 
@@ -101,5 +97,29 @@ impl From<Bytes64> for Bytes20 {
 impl From<Bytes64> for Bytes12 {
     fn from(_: Bytes64) -> Self {
         todo!()
+    }
+}
+
+impl From<[u8;12]> for Bytes12 {
+    fn from(b: [u8; 12]) -> Self {
+        Self(b)
+    }
+}
+
+impl From<[u8;32]> for Bytes32 {
+    fn from(b: [u8; 32]) -> Self {
+        Self(b)
+    }
+}
+
+impl From<[u8;20]> for Bytes20 {
+    fn from(b: [u8; 20]) -> Self {
+        Self(b)
+    }
+}
+
+impl From<[u8;64]> for Bytes64 {
+    fn from(b: [u8; 64]) -> Self {
+        Self(b)
     }
 }
